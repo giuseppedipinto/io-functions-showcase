@@ -11,6 +11,12 @@ info:
     Documentation of the IO Function API here.
 host: api.cd.italia.it
 basePath: "/template"
+tags:
+  - name: product
+    description: Everything about a Product
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
 schemes:
   - https
 paths:
@@ -39,6 +45,99 @@ paths:
         "404":
           description: Not found.
       parameters: []
+  /products:
+    get:
+      tags:
+        - product
+      summary: Products list
+      description: Returns a list of products
+      operationId: getProducts
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Product"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Product not found
+    post:
+      tags:
+        - product
+      summary: Add a new product
+      description: ""
+      operationId: addProduct
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Product object that needs to be added
+          required: true
+          schema:
+            $ref: "#/definitions/Product"
+      responses:
+        "405":
+          description: Invalid input
+  /products/{productId}:
+    get:
+      tags:
+        - product
+      summary: Find product by ID
+      description: Returns a single product
+      operationId: getProductById
+      produces:
+        - application/json
+      parameters:
+        - name: productId
+          in: path
+          description: ID of product to return
+          required: true
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Product"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Product not found
+    put:
+      tags:
+        - product
+      summary: Update an existing product
+      description: ""
+      operationId: updateProduct
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: productId
+          in: path
+          description: ID of product to update
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Product object that needs to be updated
+          required: true
+          schema:
+            $ref: "#/definitions/Product"
+      responses:
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Product not found
+        "405":
+          description: Validation exception
 definitions:
   Input:
     type: object
@@ -47,3 +146,18 @@ definitions:
         type: string
       output:
         type: string
+  Product:
+    type: object
+    properties:
+      id:
+        type: string
+      CategoryName:
+        type: string
+      Sku:
+        type: string
+      Name:
+        type: string
+      Description:
+        type: string
+      Price:
+        type: number
